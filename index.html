@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Link to QR Code</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #202f47;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+        input {
+            width: 400px;
+            padding: 10px 10px;
+            margin: 4px 0;
+            box-sizing: border-box;
+            border: 3px solid gray;
+            border-radius: 6px;
+            font-size: 20px;
+        }
+        input[type=submit] {
+            width: 100px;
+            padding: 2px 4px;
+            margin: 2px 0;
+            box-sizing: border-box;
+            border: 1px solid gray;
+            border-radius: 6px; 
+            font-size: 20px;
+            background-color: #FFFFFF;
+        }
+        label {
+            display: inline-block;
+            width: 400px;
+            font-size: 30px;
+            text-align: left;
+        }
+        #main {
+            border-radius: 10px;
+            background-color: #1c1c1c;
+            padding: 100px;
+            color: white;
+            box-shadow: 10px 10px 10px black;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <form action="generate.php" method="POST" autocomplete="off">
+            <label for="link">Enter Link</label><br>
+            <input type="url" name="link" id="link" required><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>
