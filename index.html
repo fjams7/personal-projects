@@ -1,57 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Link to QR Code</title>
-    <style>
-        body {
-            text-align: center;
-            background-color: #202f47;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 90vh;
-        }
-        input {
-            width: 400px;
-            padding: 10px 10px;
-            margin: 4px 0;
-            box-sizing: border-box;
-            border: 3px solid gray;
-            border-radius: 6px;
-            font-size: 20px;
-        }
-        input[type=submit] {
-            width: 100px;
-            padding: 2px 4px;
-            margin: 2px 0;
-            box-sizing: border-box;
-            border: 1px solid gray;
-            border-radius: 6px; 
-            font-size: 20px;
-            background-color: #FFFFFF;
-        }
-        label {
-            display: inline-block;
-            width: 400px;
-            font-size: 30px;
-            text-align: left;
-        }
-        #main {
-            border-radius: 10px;
-            background-color: #1c1c1c;
-            padding: 100px;
-            color: white;
-            box-shadow: 10px 10px 10px black;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Link to QR Code</title>
+  <style>
+    body {
+      font-family: "Century Gothic";
+      background-color: #000;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+    }
+    input, button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 10px;
+      width: 300px;
+    }
+    a {
+      color: #00f;
+      text-decoration: none;
+    }
+    .qr-code {
+      margin-top: 20px;
+      border: 5px solid white;
+      border-radius: 6px;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div id="main">
-        <form action="generate.php" method="POST" autocomplete="off">
-            <label for="link">Enter Link</label><br>
-            <input type="url" name="link" id="link" required><br><br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
+  <h2>Enter URL to generate QR and short link</h2>
+  <input type="url" id="link" placeholder="https://example.com" required />
+  <button onclick="generate()">Generate</button>
+
+  <div id="output" style="text-align: center;"></div>
+
+  <script>
+    async function generate() {
+      const url = document.getElementById("link").value.trim();
+      if (!url) return alert("Please enter a valid URL.");
+
+      const qrImg = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=FFFFFF&bgcolor=1c1c1c&data=${encodeURIComponent(url)}`;
+
+      let shortUrl = url;
+      try {
+        const res = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`);
+        shortUrl = await res.text();
+      } catch (e) {
+        console.error("Shortening failed, using original URL.");
+      }
+
+      document.getElementById("output").innerHTML = `
+        <div class="qr-code">
+          <img src="${qrImg}" alt="QR Code" width="250" height="250">
+        </div>
+        <p>Original URL: <a href="${url}" target="_blank">${url}</a></p>
+        <p>Shortened URL: <a href="${shortUrl}" target="_blank">${shortUrl}</a></p>
+      `;
+    }
+  </script>
 </body>
 </html>
